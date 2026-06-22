@@ -3075,34 +3075,44 @@ EXCEL_HEADERS = [
 ]
 
 def _save_excel(jobs: list):
+    import re as _re
+    # Strip characters illegal in Excel cells (control chars except tab/newline)
+    _ILLEGAL_CHARS_RE = _re.compile(r"[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]")
+
+    def _safe(val):
+        if val is None:
+            return ""
+        s = str(val)
+        return _ILLEGAL_CHARS_RE.sub("", s)
+
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = SHEET_NAME
     ws.append(EXCEL_HEADERS)
     for job in jobs:
         ws.append([
-            job["jobTitle"],
-            job["jobType"],
-            job["jobQualifications"],
-            job["jobExperience"],
-            job["jobLocation"],
-            job["jobField"],
-            job["datePosted"],
-            job["deadline"],
-            job["jobDescription"],
-            job["application"],
-            job["companyUrl"],
-            job["companyName"],
-            job["companyLogo"],
-            job["companyIndustry"],
-            job["companyFounded"],
-            job["companyType"],
-            job["companyWebsite"],
-            job["companyAddress"],
-            job["companyDetails"],
-            job["jobUrl"],
-            job["estimatedDeadline"],
-            job["salaryRange"],
+            _safe(job["jobTitle"]),
+            _safe(job["jobType"]),
+            _safe(job["jobQualifications"]),
+            _safe(job["jobExperience"]),
+            _safe(job["jobLocation"]),
+            _safe(job["jobField"]),
+            _safe(job["datePosted"]),
+            _safe(job["deadline"]),
+            _safe(job["jobDescription"]),
+            _safe(job["application"]),
+            _safe(job["companyUrl"]),
+            _safe(job["companyName"]),
+            _safe(job["companyLogo"]),
+            _safe(job["companyIndustry"]),
+            _safe(job["companyFounded"]),
+            _safe(job["companyType"]),
+            _safe(job["companyWebsite"]),
+            _safe(job["companyAddress"]),
+            _safe(job["companyDetails"]),
+            _safe(job["jobUrl"]),
+            _safe(job["estimatedDeadline"]),
+            _safe(job["salaryRange"]),
         ])
     wb.save(OUTPUT_FILE)
     log.info(f"Saved {len(jobs)} rows → {OUTPUT_FILE}")
