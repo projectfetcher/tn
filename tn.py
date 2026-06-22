@@ -1532,7 +1532,7 @@ def crawl_company_website_deep(website_url: str, job_title: str) -> dict:
             if not result["address"]:
                 addr_m = re.search(
                     r"tunis|sfax|sousse|monastir|nabeul|gab[eè]s|bizerte|kairouan|"
-                    r"riyadh|jeddah|..."
+                    r"riyadh|jeddah|...",
                     full_text, re.I)
                 if addr_m:
                     result["address"] = addr_m.group(0).strip()[:250]
@@ -1880,7 +1880,7 @@ def scrape_about_contact_footer(website_url: str) -> dict:
             if not result["address"]:
                 addr_m = re.search(
                     r"tunis|sfax|sousse|monastir|nabeul|gab[eè]s|bizerte|kairouan|"
-                    r"riyadh|jeddah|..."
+                    r"riyadh|jeddah|...",
                     full_text, re.I)
                 if addr_m:
                     result["address"] = addr_m.group(0).strip()[:250]
